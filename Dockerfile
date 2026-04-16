@@ -1,9 +1,11 @@
-FROM maven:3.8.4-amazoncorretto:17-alpine-jdk AS build
+# Etapa 1: Compilación
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-FROM openjdk:17-jdk-slim
+# Etapa 2: Ejecución
+FROM openjdk:17-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
